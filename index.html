@@ -70,13 +70,15 @@
         document.getElementById('user-display-name').innerText = user.displayName || 'ลูกค้า';
         if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
 
-        // 🔴 กำหนดอีเมลแอดมินของคุณซัพ (เปลี่ยนเป็นอีเมลที่คุณใช้ล็อกอินเข้าเว็บ)
-        const adminEmail = "aomzup200@gmail.com";
+        // 🔴 เช็กทั้งอีเมล (aomzup200@gmail.com) และเบอร์โทรแอดมิน (0951233077)
+        const adminEmail = "aomzup200@gmail.com"; 
+        const adminPhone = "0951233077"; // เบอร์โทรแอดมินจากในรูป
 
-        if (user.email === adminEmail) {
+        // เช็กว่าถ้าเมลตรง หรือ เบอร์โทรตรง ให้แสดงปุ่ม Admin ทันที!
+        if (user.email === adminEmail || user.phoneNumber === adminPhone) {
           const adminBtn = document.getElementById('adminBtn');
           if (adminBtn) {
-            adminBtn.style.display = 'block'; // ถ้าใช่อีเมลแอดมิน ให้แสดงปุ่ม
+            adminBtn.style.display = 'block'; 
           }
         }
       } else {
