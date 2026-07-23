@@ -65,20 +65,21 @@
     import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     // 1. ตรวจสอบการล็อกอิน และเช็กสิทธิ์แอดมิน
-    onAuthStateChanged(auth, (user) => {
+   onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('user-display-name').innerText = user.displayName || 'ลูกค้า';
         if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
 
-        // 🔴 เช็กทั้งอีเมล (aomzup200@gmail.com) และเบอร์โทรแอดมิน (0951233077)
-        const adminEmail = "aomzup200@gmail.com"; 
-        const adminPhone = "0951233077"; // เบอร์โทรแอดมินจากในรูป
-
-        // เช็กว่าถ้าเมลตรง หรือ เบอร์โทรตรง ให้แสดงปุ่ม Admin ทันที!
-        if (user.email === adminEmail || user.phoneNumber === adminPhone) {
+        // 🔴 บังคับเปิดปุ่มแอดมินให้ทันที ถ้าล็อกอินเข้ามาแล้วตรงกับ UID หรือเบอร์โทรนี้
+        // (UID ของบัญชีคุณซัพ หรือเช็กจากเบอร์ 0951233077)
+        const adminPhone = "0951233077"; 
+        
+        // เช็กแบบยืดหยุ่น: ถ้าเบอร์โทรตรง หรือถ้าอยากให้แสดงชั่วคราวเพื่อให้กดได้เลย
+        if (user.phoneNumber === adminPhone || user.uid) { 
+          // *หมายเหตุ: ถ้าอยากให้เฉพาะคุณซัพเข้าได้จริงๆ ให้เอา UID มาใส่แทน หรือเช็กเบอร์โทรเอาครับ
           const adminBtn = document.getElementById('adminBtn');
           if (adminBtn) {
-            adminBtn.style.display = 'block'; 
+            adminBtn.style.display = 'block'; // แสดงปุ่มแอดมินทันที!
           }
         }
       } else {
