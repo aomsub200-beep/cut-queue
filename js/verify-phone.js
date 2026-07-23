@@ -82,7 +82,7 @@ document.getElementById('verify-otp-btn')?.addEventListener('click', async () =>
     await updatePhoneStatus(user.uid, rawPhone); // 👈 เพิ่มบรรทัดนี้เข้าไปครับ!
 
     alert("ยืนยันเบอร์โทรศัพท์สำเร็จ!");
-    window.location.href = "home.html";
+    window.location.href = "index.html";
 
   } catch (error) {
     console.error("OTP Verification Error:", error);

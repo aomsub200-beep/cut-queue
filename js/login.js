@@ -19,7 +19,7 @@ googleBtn.addEventListener('click', async () => {
 
     // 3. Routing Check according to logic flow
     if (userData.phoneVerified) {
-      window.location.href = "home.html";
+      window.location.href = "index.html";
     } else {
       window.location.href = "verify-phone.html";
     }
