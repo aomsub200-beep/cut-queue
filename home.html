@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - หน้าหลัก</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar glass-card glass-card-sm fade-in">
+      <div class="nav-brand">
+        <span class="logo-icon">💈</span>
+        <span class="brand-name">CutQueue</span>
+      </div>
+      <div class="nav-links">
+        <a href="history.html" class="nav-item">ประวัติการจอง</a>
+        <a href="profile.html" class="profile-pill">
+          <img id="user-avatar" src="https://via.placeholder.com/40" alt="Profile">
+          <span id="user-display-name">Loading...</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Header Banner -->
+    <header class="hero-section fade-in">
+      <h1>เลือกบริการที่คุณต้องการ</h1>
+      <p>สัมผัสประสบการณ์ตัดผมสไตล์พรีเมียม จองคิวง่ายๆ ในไม่กี่ขั้นตอน</p>
+    </header>
+
+    <!-- Dynamic Services Grid (ดึงข้อมูลจาก Firestore) -->
+    <section id="services-container" class="services-grid slide-up">
+      <p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">กำลังโหลดรายการบริการ...</p>
+    </section>
+  </main>
+
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+  
+  <script type="module">
+    import { auth, db } from "./firebase/config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 1. ตรวจสอบการล็อกอิน
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('user-display-name').innerText = user.displayName || 'ลูกค้า';
+        if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    // 2. ดึงรายการบริการจาก Firestore แบบ Realtime
+    const servicesContainer = document.getElementById('services-container');
+
+    onSnapshot(collection(db, "Services"), (snapshot) => {
+      servicesContainer.innerHTML = '';
+
+      if (snapshot.empty) {
+        servicesContainer.innerHTML = `<p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">ยังไม่มีรายการบริการในขณะนี้</p>`;
+        return;
+      }
+
+      snapshot.docs.forEach(docSnap => {
+        const service = docSnap.data();
+        const id = docSnap.id;
+
+        // ถ้ามีรูป ให้โชว์รูปทรงผมสี่เหลี่ยมมนๆ แล้วซ่อนอีโมจิ 💈 ออกไปเลย
+        const mediaElement = service.imageUrl 
+          ? `<img src="${service.imageUrl}" alt="${service.name}" style="width: 60px; height: 60px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2);">`
+          : `<div class="service-icon" style="flex-shrink: 0;">💈</div>`;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card service-card jelly-card';
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 16px;">
+            ${mediaElement}
+            <div class="service-info" style="flex: 1;">
+              <h3 style="margin: 0 0 6px 0;">${service.name || 'บริการตัดผม'}</h3>
+              <p class="service-desc" style="margin: 0;">ระยะเวลาประมาณ ${service.duration || 30} นาที</p>
+            </div>
+          </div>
+          <div class="service-footer" style="margin-top: 18px;">
+            <span class="price">${service.price || 0} ฿</span>
+            <button onclick="selectService('${id}', '${service.name}', ${service.price})" class="btn-primary btn-ripple">จองคิวนี้</button>
+          </div>
+        `;
+        servicesContainer.appendChild(card);
+      });
+    });
+
+    // 3. ฟังก์ชันเลือกบริการแล้วส่งไปหน้า booking.html
+    window.selectService = function(id, name, price) {
+      sessionStorage.setItem('selectedService', JSON.stringify({ id, name, price }));
+      window.location.href = "booking.html";
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - Admin Dashboard</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container">
+    <header class="admin-header fade-in">
+      <h2>💈 Admin Dashboard</h2>
+      <button id="admin-logout-btn" class="btn-secondary" style="padding: 8px 16px;">Logout</button>
+    </header>
+
+    <!-- Stat Cards -->
+    <section class="stat-grid slide-up">
+      <div class="glass-card stat-card">
+        <h4>ทั้งหมด (Total)</h4>
+        <p id="stat-total">0</p>
+      </div>
+      <div class="glass-card stat-card">
+        <h4>วันนี้ (Today)</h4>
+        <p id="stat-today">0</p>
+      </div>
+      <div class="glass-card stat-card">
+        <h4>รายได้ (Revenue)</h4>
+        <p id="stat-revenue" style="color: #34D399;">0 ฿</p>
+      </div>
+      <div class="glass-card stat-card">
+        <h4>Pending</h4>
+        <p id="stat-pending" style="color: #FBBF24;">0</p>
+      </div>
+      <div class="glass-card stat-card">
+        <h4>Confirmed</h4>
+        <p id="stat-confirmed" style="color: #34D399;">0</p>
+      </div>
+      <div class="glass-card stat-card">
+        <h4>Cancelled</h4>
+        <p id="stat-cancelled" style="color: #F87171;">0</p>
+      </div>
+    </section>
+
+    <!-- 1. Booking Management Table -->
+    <section class="glass-card table-card slide-up" style="margin-top: 30px;">
+      <h3>รายการจองคิวทั้งหมด</h3>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ลูกค้า</th>
+              <th>เบอร์โทร</th>
+              <th>บริการ</th>
+              <th>วัน/เวลา</th>
+              <th>การชำระเงิน</th>
+              <th>สถานะ</th>
+              <th>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="admin-booking-rows">
+            <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">กำลังโหลดข้อมูล...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. Services Management Section -->
+    <section class="glass-card table-card slide-up" style="margin-top: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3>✂️ จัดการบริการตัดผม</h3>
+        <button id="open-add-service-modal" class="btn-primary" style="padding: 8px 16px;">+ เพิ่มบริการใหม่</button>
+      </div>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ชื่อบริการ</th>
+              <th>ราคา (บาท)</th>
+              <th>ระยะเวลา (นาที)</th>
+              <th>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="admin-services-rows">
+            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">กำลังโหลดข้อมูลบริการ...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Cancel Reason Modal -->
+  <div id="cancel-modal" class="modal-backdrop" style="display: none;">
+    <div class="glass-card modal-content">
+      <h3>ระบุเหตุผลการยกเลิก</h3>
+      <input type="text" id="cancel-reason-input" class="input-glass" placeholder="เช่น ช่างไม่ว่าง / ข้อมูลไม่ถูกต้อง" style="margin: 15px 0;">
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button id="close-modal-btn" class="btn-secondary">ยกเลิก</button>
+        <button id="confirm-cancel-btn" class="btn-primary" style="background: linear-gradient(135deg, #EF4444, #DC2626);">ยืนยันยกเลิกคิว</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slip Image Preview Modal -->
+  <div id="slip-modal" class="modal-backdrop" style="display: none;">
+    <div class="glass-card modal-content" style="text-align: center; max-width: 420px;">
+      <h3>🖼️ สลิปการโอนเงิน</h3>
+      <div style="margin: 15px 0;">
+        <img id="slip-modal-img" src="" alt="สลิปโอนเงิน" style="max-width: 100%; max-height: 400px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
+      </div>
+      <button id="close-slip-modal-btn" class="btn-secondary" style="width: 100%;">ปิด</button>
+    </div>
+  </div>
+
+  <!-- Add Service Modal (เพิ่มช่องอัปโหลดรูป) -->
+  <div id="service-modal" class="modal-backdrop" style="display: none;">
+    <div class="glass-card modal-content" style="max-width: 450px;">
+      <h3 id="service-modal-title">✂️ เพิ่มบริการใหม่</h3>
+      <div style="margin: 15px 0; display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label style="display: block; font-size: 0.85rem; margin-bottom: 5px;">ชื่อบริการ:</label>
+          <input type="text" id="service-name-input" class="input-glass" placeholder="เช่น French Crop (ซอยสั้นมีเลเยอร์)" style="width: 100%;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; margin-bottom: 5px;">ราคา (บาท):</label>
+          <input type="number" id="service-price-input" class="input-glass" placeholder="เช่น 160" style="width: 100%;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; margin-bottom: 5px;">ระยะเวลา (นาที):</label>
+          <input type="number" id="service-duration-input" class="input-glass" placeholder="เช่น 75" style="width: 100%;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; margin-bottom: 5px;">รูปภาพตัวอย่างทรงผม:</label>
+          <input type="file" id="service-file-input" accept="image/*" class="input-glass" style="width: 100%; padding: 8px;">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+        <button id="close-service-modal-btn" class="btn-secondary">ยกเลิก</button>
+        <button id="save-service-btn" class="btn-primary">บันทึกบริการ</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

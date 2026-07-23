@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - เลือกล็อกเวลาจอง</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container">
+    <div class="glass-card fade-in booking-card">
+      <a href="home.html" class="back-link">← ย้อนกลับไปเลือกบริการ</a>
+      
+      <!-- Selected Service Banner -->
+      <div class="selected-service-box">
+        <span class="service-tag">บริการที่เลือก</span>
+        <h2 id="service-title">กำลังโหลด...</h2>
+        <p id="service-price" class="price-tag">0 ฿</p>
+      </div>
+
+      <!-- Step 1: เลือกวันที่ -->
+      <div class="booking-section">
+        <h3>1. เลือกวันที่รับบริการ</h3>
+        <div class="form-group" style="margin-top: 12px;">
+          <input type="date" id="booking-date" class="input-glass">
+        </div>
+      </div>
+
+      <!-- Step 2: เลือกรอบเวลา -->
+      <div class="booking-section">
+        <h3>2. เลือกรอบเวลา</h3>
+        <p class="section-desc">รอบเวลาที่ถูกจองแล้วจะไม่สามารถเลือกได้</p>
+        
+        <div id="time-slots-grid" class="time-grid">
+          <!-- Rendered dynamically by booking.js -->
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button id="proceed-pay-btn" class="btn-primary btn-ripple proceed-btn" disabled>
+        ไปที่หน้าชำระเงิน →
+      </button>
+    </div>
+  </main>
+
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+  <script type="module" src="js/booking.js"></script>
+</body>
+</html>

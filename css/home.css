@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Home Page Styling
+   ========================================================================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+  color: var(--text-white);
+}
+
+.profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--glass-bg);
+  padding: 6px 16px 6px 6px;
+  border-radius: 30px;
+  border: 1px solid var(--glass-border);
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.profile-pill img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-section p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.service-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.service-info h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.service-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.service-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 16px;
+}
+
+.service-footer .price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}

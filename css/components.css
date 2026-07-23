@@ -1,0 +1,142 @@
+/* ==========================================================================
+   CutQueue UI Components - Glassmorphism & Reusable Elements
+   ========================================================================== */
+
+/* Glass Cards System */
+.glass-card {
+  background: var(--glass-card);
+  backdrop-filter: blur(var(--blur-amount));
+  -webkit-backdrop-filter: blur(var(--blur-amount));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-sm {
+  padding: 20px;
+  border-radius: var(--radius-md);
+}
+
+/* Glass Buttons & Ripple Effect */
+.btn-primary {
+  background: var(--accent-gradient);
+  color: var(--text-white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px rgba(59, 130, 246, 0.5);
+}
+
+.btn-secondary {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--glass-bg-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Ripple Animation Element */
+.ripple-span {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleFx 0.6s linear;
+  background-color: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+@keyframes rippleFx {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Form Inputs */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.input-glass {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  color: var(--text-white);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-glass:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Status Badges */
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-confirmed {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-cancelled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}

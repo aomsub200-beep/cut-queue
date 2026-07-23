@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - จองคิวสำเร็จ</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container login-wrapper">
+    <div class="glass-card login-card fade-in jelly-card" style="max-width: 450px;">
+      <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
+      <h2 style="color: #34D399; margin-bottom: 8px;">จองคิวสำเร็จ!</h2>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">รหัสอ้างอิงการจองของคุณ</p>
+      
+      <div style="background: rgba(255, 255, 255, 0.05); padding: 14px; border-radius: 12px; margin: 20px 0; border: 1px solid var(--glass-border);">
+        <code id="booking-id-text" style="font-size: 1.2rem; color: var(--primary-color); font-weight: 600;">-</code>
+      </div>
+
+      <div class="badge badge-pending" style="margin-bottom: 25px;">
+        ⏳ สถานะ: รอยืนยัน (Pending)
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <a href="history.html" class="btn-primary btn-ripple" style="flex: 1; text-decoration: none;">ดูประวัติการจอง</a>
+        <a href="home.html" class="btn-secondary" style="flex: 1; text-decoration: none;">กลับหน้าหลัก</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+  
+  <script>
+    const bookingID = sessionStorage.getItem('lastBookingID') || 'N/A';
+    document.getElementById('booking-id-text').innerText = bookingID;
+  </script>
+</body>
+</html>

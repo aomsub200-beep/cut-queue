@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - โปรไฟล์ส่วนตัว</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container login-wrapper">
+    <div class="glass-card login-card fade-in jelly-card" style="max-width: 480px; text-align: left;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <img id="p-photo" src="https://via.placeholder.com/100" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary-color); object-fit: cover;">
+        <h2 id="p-name" style="margin-top: 12px;">Loading...</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">อีเมล (Email)</label>
+        <input type="text" id="p-email" class="input-glass" readonly>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">เบอร์โทรศัพท์ (Phone)</label>
+        <input type="text" id="p-phone" class="input-glass" readonly>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <a href="home.html" class="btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">ย้อนกลับ</a>
+        <button id="logout-btn" class="btn-primary btn-ripple" style="flex: 1; background: linear-gradient(135deg, #EF4444, #DC2626);">ออกจากระบบ</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+  
+  <script type="module">
+  import { auth, db } from "./firebase/config.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // 1. เช็กรูปโปรไฟล์ ถ้าไม่มีให้ใช้รูป Avartar เท่ๆ แทน จะได้ไม่เป็นรูปกระดาษเสีย
+      const photoImg = document.getElementById('p-photo');
+      if (photoImg) {
+        photoImg.src = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.uid}`;
+      }
+
+      // 2. แสดงชื่อผู้ใช้งาน
+      const nameEl = document.getElementById('p-name');
+      if (nameEl) {
+        nameEl.innerText = user.displayName || user.email || 'ผู้ใช้งานระบบ';
+      }
+
+      // 3. แสดงอีเมล (ดึงจาก Auth ก่อน ถ้าไม่มีค่อยไปดึงจาก Firestore)
+      const emailInput = document.getElementById('p-email');
+      if (emailInput) {
+        emailInput.value = user.email || '-';
+      }
+
+      // 4. ดึงข้อมูลเพิ่มเติมจาก Firestore (เบอร์โทร หรืออีเมลสำรอง)
+      try {
+        const userDoc = await getDoc(doc(db, "Users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (document.getElementById('p-phone')) {
+            document.getElementById('p-phone').value = userData.phone || '-';
+          }
+          if (userData.email && emailInput && emailInput.value === '-') {
+            emailInput.value = userData.email;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user doc:", error);
+      }
+
+    } else {
+      window.location.href = "login.html";
+    }
+  });
+
+  // Event ปุ่มออกจากระบบ
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    try {
+      await signOut(auth);
+      alert("ออกจากระบบสำเร็จ");
+      window.location.href = "login.html";
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  });
+</script>
+</body>
+</html>

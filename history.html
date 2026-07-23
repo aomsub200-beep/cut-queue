@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - ประวัติการจอง</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .history-card { max-width: 700px; margin: 40px auto; }
+    .booking-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .booking-info h4 { font-size: 1.1rem; margin-bottom: 6px; }
+    .booking-info p { font-size: 0.85rem; color: var(--text-secondary); }
+    .cancel-btn {
+      background: rgba(239, 68, 68, 0.2);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    .cancel-btn:hover { background: rgba(239, 68, 68, 0.4); }
+  </style>
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container">
+    <div class="glass-card fade-in history-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>ประวัติการจองคิวของคุณ</h2>
+        <a href="home.html" class="btn-secondary" style="text-decoration: none; font-size: 0.9rem; padding: 8px 16px;">กลับหน้าหลัก</a>
+      </div>
+
+      <div id="history-list">
+        <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">กำลังโหลดประวัติการจอง...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+
+  <script type="module">
+    import { auth, db } from "./firebase/config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { collection, query, where, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = "login.html"; return; }
+      loadHistory(user.uid);
+    });
+
+    async function loadHistory(uid) {
+      const container = document.getElementById('history-list');
+      try {
+        const q = query(collection(db, "Bookings"), where("uid", "==", uid));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 40px 0;">ยังไม่มีประวัติการจองคิว</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        snapshot.docs.forEach(docSnap => {
+          const item = docSnap.data();
+          const id = docSnap.id;
+          
+          // คำนวณเวลาเพื่อเช็กเงื่อนไข 10 นาที (10 * 60 * 1000 ms)
+          const createdTime = item.createdAt ? item.createdAt.toDate().getTime() : Date.now();
+          const currentTime = Date.now();
+          const diffMinutes = (currentTime - createdTime) / (1000 * 60);
+          const canCancel = item.status === "Pending" && diffMinutes <= 10;
+
+          let badgeClass = "badge-pending";
+          let badgeText = "Pending";
+          if (item.status === "Confirmed") { badgeClass = "badge-confirmed"; badgeText = "Confirmed"; }
+          if (item.status === "Cancelled") { badgeClass = "badge-cancelled"; badgeText = "Cancelled"; }
+
+          const html = `
+            <div class="booking-item jelly-card">
+              <div class="booking-info">
+                <h4>${item.serviceName} (${item.price} ฿)</h4>
+                <p>📅 วันที่: ${item.date} | ⏰ เวลา: ${item.time} น.</p>
+                <p>💳 ชำระโดย: ${item.paymentMethod === 'cash' ? 'เงินสด' : 'โอนเงิน'}</p>
+                ${item.cancelReason ? `<p style="color: #F87171; margin-top: 4px;">เหตุผลที่ยกเลิก: ${item.cancelReason}</p>` : ''}
+              </div>
+              <div style="text-align: right; display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                <span class="badge ${badgeClass}">${badgeText}</span>
+                ${canCancel ? `<button onclick="cancelBooking('${id}')" class="cancel-btn">ยกเลิกการจอง</button>` : ''}
+              </div>
+            </div>
+          `;
+          container.innerHTML += html;
+        });
+
+      } catch (err) {
+        console.error("History Error:", err);
+        container.innerHTML = '<p style="color: #F87171; text-align: center;">เกิดข้อผิดพลาดในการดึงข้อมูล</p>';
+      }
+    }
+
+    window.cancelBooking = async function(bookingId) {
+      if (confirm("คุณต้องการยกเลิกการจองคิวนี้ใช่หรือไม่?")) {
+        try {
+          await updateDoc(doc(db, "Bookings", bookingId), {
+            status: "Cancelled",
+            cancelReason: "ยกเลิกโดยผู้ใช้งาน"
+          });
+          alert("ยกเลิกการจองสำเร็จ");
+          location.reload();
+        } catch (err) {
+          alert("เกิดข้อผิดพลาด: " + err.message);
+        }
+      }
+
+    };
+  </script>
+</body>
+</html>

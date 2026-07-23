@@ -1,0 +1,41 @@
+/* ==========================================================================
+   CutQueue Design System - Color Variables & Tokens
+   ========================================================================== */
+:root {
+  /* Color Palette */
+  --primary-color: #3B82F6;
+  --primary-hover: #2563EB;
+  --secondary-color: #7C3AED;
+  --secondary-hover: #6D28D9;
+  
+  /* Gradient Combinations */
+  --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #0F172A 100%);
+  --accent-gradient: linear-gradient(135deg, #3B82F6 0%, #7C3AED 100%);
+  --glass-border-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+
+  /* Glassmorphism Backgrounds */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-hover: rgba(255, 255, 255, 0.12);
+  --glass-card: rgba(15, 23, 42, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  
+  /* Text Colors */
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-white: #FFFFFF;
+
+  /* UI Tokens */
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --blur-amount: 20px;
+  
+  /* Shadows */
+  --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.35);
+  --shadow-glow-purple: 0 0 25px rgba(124, 58, 237, 0.35);
+
+  /* Font Family */
+  --font-main: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+}

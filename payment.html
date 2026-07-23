@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - ชำระเงิน</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container">
+    <div class="glass-card fade-in payment-card">
+      <a href="booking.html" class="back-link">← ย้อนกลับไปเลือกเวลา</a>
+      <h2>สรุปการจอง & ชำระเงิน</h2>
+
+      <!-- Booking Details Summary -->
+      <div class="summary-box">
+        <div class="summary-row">
+          <span>บริการ:</span>
+          <strong id="summary-service">-</strong>
+        </div>
+        <div class="summary-row">
+          <span>วันที่:</span>
+          <strong id="summary-date">-</strong>
+        </div>
+        <div class="summary-row">
+          <span>เวลา:</span>
+          <strong id="summary-time">-</strong>
+        </div>
+        <div class="summary-row total-row">
+          <span>ยอดชำระทั้งสิ้น:</span>
+          <strong id="summary-price" class="total-price">0 ฿</strong>
+        </div>
+      </div>
+
+      <!-- Payment Method Selection -->
+      <div class="payment-method-section">
+        <h3>ช่องทางการชำระเงิน</h3>
+        <div class="method-options">
+          <label class="method-card active">
+            <input type="radio" name="payMethod" value="transfer" checked>
+            <span class="radio-title">💳 โอนเงินผ่าน QR Code</span>
+          </label>
+          <label class="method-card">
+            <input type="radio" name="payMethod" value="cash">
+            <span class="radio-title">💵 ชำระเงินสดหน้าร้าน</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- QR Transfer Area -->
+      <div id="transfer-area" class="transfer-box">
+        <p>สแกน QR Code เพื่อชำระเงิน</p>
+        <div class="qr-code-wrapper">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=CutQueueBarberPayment" alt="PromptPay QR">
+        </div>
+        
+        <div class="form-group" style="margin-top: 15px;">
+          <label class="form-label">แนบหลักฐานการโอนเงิน (สลิป)</label>
+          <input type="file" id="slip-file" class="input-glass" accept="image/*">
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button id="confirm-booking-btn" class="btn-primary btn-ripple confirm-btn">
+        ยืนยันการจองคิว
+      </button>
+    </div>
+  </main>
+
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+  <script type="module" src="js/payment.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CutQueue - ยืนยันเบอร์โทรศัพท์</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="app-container login-wrapper">
+    <div class="glass-card login-card fade-in jelly-card">
+      <div class="login-header">
+        <div class="logo-icon">📱</div>
+        <h2>ยืนยันเบอร์โทรศัพท์</h2>
+        <p>กรุณาระบุเบอร์โทรศัพท์เพื่อรับรหัส SMS OTP</p>
+      </div>
+
+      <!-- Step 1: กรอกเบอร์โทร -->
+      <div id="phone-section">
+        <div class="form-group">
+          <input type="tel" id="phone-input" class="input-glass" placeholder="0951233077 หรือ +66951233077" maxlength="13">
+        </div>
+        <div id="recaptcha-container"></div>
+        <button id="send-otp-btn" class="btn-primary btn-ripple" style="width: 100%; margin-top: 15px;">
+          ส่งรหัส OTP
+        </button>
+      </div>
+
+      <!-- Step 2: กรอก OTP (ซ่อนไว้ก่อน) -->
+      <div id="otp-section" style="display: none;">
+        <div class="form-group">
+          <input type="text" id="otp-input" class="input-glass" placeholder="รหัส OTP 6 หลัก" maxlength="6">
+        </div>
+        <button id="verify-otp-btn" class="btn-primary btn-ripple" style="width: 100%; margin-top: 15px;">
+          ยืนยันรหัส OTP
+        </button>
+      </div>
+    </div>
+  </main>
+<!-- Interactive Scripts (ถ้ามี) -->
+  <script src="js/cursor.js"></script>
+  <script src="js/ripple.js"></script>
+  <script src="js/jelly.js"></script>
+
+  <!-- Logic Scripts -->
+  <script type="module" src="js/verify-phone.js"></script>
+</body>
+</html>
