@@ -29,7 +29,12 @@
         <span class="logo-icon">💈</span>
         <span class="brand-name">CutQueue</span>
       </div>
-      <div class="nav-links">
+      <div class="nav-links" style="display: flex; align-items: center; gap: 10px;">
+        <!-- ปุ่มไปหน้า Admin (ซ่อนไว้ก่อน จะแสดงเฉพาะแอดมิน) -->
+        <button id="adminBtn" style="display: none; background: rgba(255, 75, 75, 0.2); border: 1px solid rgba(255, 75, 75, 0.4); color: #ff6b6b; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'Kanit', sans-serif; font-size: 14px;" onclick="goToAdmin()">
+          ⚙️ จัดการร้าน
+        </button>
+
         <a href="history.html" class="nav-item">ประวัติการจอง</a>
         <a href="profile.html" class="profile-pill">
           <img id="user-avatar" src="https://via.placeholder.com/40" alt="Profile">
@@ -59,15 +64,30 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 1. ตรวจสอบการล็อกอิน
+    // 1. ตรวจสอบการล็อกอิน และเช็กสิทธิ์แอดมิน
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('user-display-name').innerText = user.displayName || 'ลูกค้า';
         if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
+
+        // 🔴 กำหนดอีเมลแอดมินของคุณซัพ (เปลี่ยนเป็นอีเมลที่คุณใช้ล็อกอินเข้าเว็บ)
+        const adminEmail = "aomzup200@gmail.com"; 
+
+        if (user.email === adminEmail) {
+          const adminBtn = document.getElementById('adminBtn');
+          if (adminBtn) {
+            adminBtn.style.display = 'block'; // ถ้าใช่อีเมลแอดมิน ให้แสดงปุ่ม
+          }
+        }
       } else {
         window.location.href = "login.html";
       }
     });
+
+    // ฟังก์ชันกดไปหน้าแอดมิน
+    window.goToAdmin = function() {
+      window.location.href = "admin.html";
+    };
 
     // 2. ดึงรายการบริการจาก Firestore แบบ Realtime
     const servicesContainer = document.getElementById('services-container');
@@ -84,7 +104,6 @@
         const service = docSnap.data();
         const id = docSnap.id;
 
-        // ถ้ามีรูป ให้โชว์รูปทรงผมสี่เหลี่ยมมนๆ แล้วซ่อนอีโมจิ 💈 ออกไปเลย
         const mediaElement = service.imageUrl 
           ? `<img src="${service.imageUrl}" alt="${service.name}" style="width: 60px; height: 60px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2);">`
           : `<div class="service-icon" style="flex-shrink: 0;">💈</div>`;
